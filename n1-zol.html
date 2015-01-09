@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8"/>	
+	<title>N1抢购</title>
+	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+</head>
+<body>
+<p>flat ： <span id="flag"></span> flag 为1时是抢购开始,抢购开始后会帮您自动跳转到购买页面</p>
+<p>msg : <span id="msg"></span></p>
+<div id="buy-btn"><a href="javascript:;">请稍等</a></div>
+<br />
+<script type="text/javascript">
+	$(document).ready(function(){
+		var timer = setInterval(function(){
+			var t = Math.random();
+			var	url="http://api.zol.com/index.php?callback=?&c=Activity_Tuan&a=CheckBuy&t="+t;
+			var i=0;
+			$.getJSON(url,{},function(obj){
+				console.log(obj);
+				var flag = obj.flag;
+				$("#flag").text(obj.flag);
+				$("#msg").text(obj.msg)
+				if(flag == 1){
+					clearInterval(timer);
+					$('#buy-btn').html('<a target="_blank" href="'+obj.pcBuyUrl+'">立即购买</a>');
+					window.location.href=obj.pcBuyUrl; 
+				}
+			})
+		},100)
+	})
+</script>
+</body>
+</html>
